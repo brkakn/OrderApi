@@ -6,20 +6,20 @@ namespace Order.Services.BusServices.Messages;
 [NotMapped]
 public abstract record PublishedMessage
 {
-    private readonly string _exchangeName;
-    private readonly string _routingKey;
+	private readonly string _exchangeName;
+	private readonly string _routingKey;
 
-    protected PublishedMessage(string exchangeName, string routingKey)
-    {
-        _exchangeName = exchangeName.ToLower();
-        _routingKey = routingKey.ToLower();
-    }
+	protected PublishedMessage(string exchangeName, string routingKey)
+	{
+		_exchangeName = exchangeName.ToLower();
+		_routingKey = routingKey.ToLower();
+	}
 
-    [JsonIgnore]
-    public string ExchangeName { get => _exchangeName; }
+	[JsonIgnore]
+	public string ExchangeName { get => _exchangeName; }
 
-    [JsonIgnore]
-    public string RoutingKey { get => _routingKey; }
+	[JsonIgnore]
+	public string RoutingKey { get => _routingKey; }
 
-    public Guid MessageId { get; set; }
+	public Guid MessageId { get; set; }
 }

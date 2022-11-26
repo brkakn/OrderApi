@@ -3,8 +3,8 @@ using RabbitMQ.Client;
 
 namespace Order.Services.BusServices
 {
-    public interface IBusPublisher
-    {
-        void Publish<T>(T message, Guid? messageId = null, IBasicProperties? properties = null) where T : PublishedMessage;
-    }
+	public interface IBusPublisher
+	{
+		void Publish<T>(T message, Guid? messageId = null, IBasicProperties? properties = null) where T : PublishedMessage;
+	}
 }

@@ -1,8 +1,9 @@
-﻿using Order.Entities.Common;
+﻿using Order.Entities;
+using Order.Services.AutoMapper;
 
-namespace Order.Entities;
+namespace Order.Models.User;
 
-public class UserEntity : BaseEntity
+public record UserListModel : IMapFrom<UserEntity>
 {
 	public string Name { get; set; } = null!;
 	public string Surname { get; set; } = null!;
@@ -12,6 +13,4 @@ public class UserEntity : BaseEntity
 	public bool SmsNotification { get; set; }
 	public bool EmailNotification { get; set; }
 	public bool PushNotification { get; set; }
-
-	public ICollection<OrderEntity>? Orders { get; set; }
 }
