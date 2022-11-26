@@ -1,9 +1,12 @@
-﻿using Order.Entities.Common;
+﻿using Order.Entities;
 using Order.Enums;
+using Order.Services.AutoMapper;
+using Order.Services.BusServices.Messages;
+using OrderApi.Constants;
 
-namespace Order.Entities;
+namespace OrderApi.Messages.Order;
 
-public class OrderEntity : BaseEntity
+public record AddOrderMessage() : PublishedMessage(MessageBrokerKeys.OrderExchange, MessageBrokerKeys.AddOrderKey), IMessage, IMapFrom<OrderEntity>
 {
 	public long UserId { get; set; }
 	public DateTime OrderDate { get; set; }
@@ -12,6 +15,4 @@ public class OrderEntity : BaseEntity
 	public bool SmsNotification { get; set; }
 	public bool EmailNotification { get; set; }
 	public bool PushNotification { get; set; }
-
-	public virtual UserEntity User { get; set; } = null!;
 }

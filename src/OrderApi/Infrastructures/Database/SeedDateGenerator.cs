@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Entities;
 
-namespace Order.Infrastructrues.Database;
+namespace Order.Infrastructures.Database;
 
 public static class SeedDateGenerator
 {

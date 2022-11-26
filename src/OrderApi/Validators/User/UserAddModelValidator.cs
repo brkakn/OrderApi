@@ -2,7 +2,7 @@
 using FluentValidation;
 using Order.Models.User;
 
-namespace Order.Validators;
+namespace Order.Validators.User;
 
 public class UserAddModelValidator : AbstractValidator<UserAddModel>
 {

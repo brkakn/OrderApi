@@ -3,9 +3,10 @@ global using System.Collections.Generic;
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Order.Infrastructrues.Database;
+using Order.Infrastructures.Database;
 using Order.Services.AutoMapper;
 using Order.Services.BusServices.Extensions;
+using OrderApi.Infrastructures.MessageBroker;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +47,7 @@ using (var scope = app.Services.CreateScope())
 {
 	await SeedDateGenerator.Initialize(scope.ServiceProvider);
 }
+
+await app.SubscribeQueues();
 
 app.Run();

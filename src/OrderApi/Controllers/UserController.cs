@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Order.Entities;
 using Order.Enums;
-using Order.Infrastructrues.Database;
+using Order.Infrastructures.Database;
 using Order.Models.User;
 
 namespace Order.Controllers;
@@ -31,9 +31,10 @@ public class UserController : ControllerBase
 	public async Task<IActionResult> GetById(long id, CancellationToken ct)
 	{
 		var userModel = await _orderDbContext.Set<UserEntity>()
-				.Where(e => e.Id == id && e.Status == RecordStatuses.Active)
-				.ProjectTo<UserListModel>(_mapper.ConfigurationProvider)
-				.FirstOrDefaultAsync(ct);
+			.Where(e => e.Id == id && e.Status == RecordStatuses.Active)
+			.AsNoTracking()
+			.ProjectTo<UserListModel>(_mapper.ConfigurationProvider)
+			.FirstOrDefaultAsync(ct);
 
 		if (userModel == null)
 		{
@@ -46,9 +47,13 @@ public class UserController : ControllerBase
 	[HttpGet("list")]
 	public async Task<IActionResult> GetList(CancellationToken ct)
 	{
-		var query = _orderDbContext.Set<UserEntity>().Where(e => e.Status == RecordStatuses.Active);
-		var model = await query.ProjectTo<UserListModel>(_mapper.ConfigurationProvider).ToListAsync(ct);
-		return Ok(model);
+		var modelList = await _orderDbContext.Set<UserEntity>()
+			.Where(e => e.Status == RecordStatuses.Active)
+			.AsNoTracking()
+			.ProjectTo<UserListModel>(_mapper.ConfigurationProvider)
+			.ToListAsync(ct);
+
+		return Ok(modelList);
 	}
 
 	[HttpPost]
@@ -61,11 +66,45 @@ public class UserController : ControllerBase
 		}
 
 		var userEntity = _mapper.Map<UserEntity>(userAddModel);
+		userEntity.Add();
 		await _orderDbContext.AddAsync(userEntity, ct);
 		await _orderDbContext.SaveChangesAsync(ct);
 
 		_logger.LogInformation($"User added. User.Id: {userEntity.Id}");
 
 		return CreatedAtAction(nameof(GetById), new { userEntity.Id }, userAddModel);
+	}
+
+	[HttpPut("{id:required}")]
+	public async Task<IActionResult> Put(long id, [FromBody] UserAddModel model, CancellationToken ct)
+	{
+		var userEntity = await _orderDbContext.Set<UserEntity>().Where(e => e.Id == id && e.Status == RecordStatuses.Active).FirstOrDefaultAsync(ct);
+		if (userEntity == null)
+		{
+			return NotFound();
+		}
+
+		userEntity = _mapper.Map(model, userEntity);
+		userEntity.Update();
+
+		await _orderDbContext.SaveChangesAsync(ct);
+
+		return NoContent();
+	}
+
+	[HttpDelete("{id:required}")]
+	public async Task<IActionResult> Delete(long id, CancellationToken ct)
+	{
+		var userEntity = await _orderDbContext.Set<UserEntity>().Where(e => e.Id == id && e.Status == RecordStatuses.Active).FirstOrDefaultAsync(ct);
+		if (userEntity == null)
+		{
+			return NotFound();
+		}
+
+		userEntity.Delete();
+
+		await _orderDbContext.SaveChangesAsync(ct);
+
+		return Ok();
 	}
 }
