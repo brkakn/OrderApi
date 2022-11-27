@@ -1,9 +1,5 @@
 ﻿using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
 using Order.Services.BusServices.Messages;
 using OrderApi.Services.BusServices.Enums;
@@ -79,10 +75,6 @@ public class BusSubscriber : IBusSubscriber
 								 autoAck: false,
 								 consumer: consumer);
 		}
-		catch(Exception ex)
-		{
-			throw;
-		}
 		finally
 		{
 			_channelPool.Return(channel);
@@ -98,7 +90,7 @@ public class BusSubscriber : IBusSubscriber
 			await handler.HandleAsync(message);
 			return true;
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			return false;
 		}

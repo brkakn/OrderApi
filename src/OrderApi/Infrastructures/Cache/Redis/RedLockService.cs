@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using OrderApi.Infrastructures.Cache.Redis;
-using RedLockNet.SERedis.Configuration;
 using RedLockNet.SERedis;
+using RedLockNet.SERedis.Configuration;
 using StackExchange.Redis;
 
 namespace Order.Infrastructures.Cache.Redis;

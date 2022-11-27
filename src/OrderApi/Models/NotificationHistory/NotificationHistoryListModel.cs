@@ -8,6 +8,6 @@ public record NotificationHistoryListModel : IMapFrom<NotificationHistoryEntity>
 {
 	public long Id { get; set; }
 	public string Content { get; set; } = null!;
-	public NotificationTypes Type { get; set; }
-	public NotificationStatuses NotificationStatus { get; set; }
+	public string Type { get; set; }
+	public string NotificationStatus { get; set; }
 }

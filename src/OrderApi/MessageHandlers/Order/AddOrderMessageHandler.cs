@@ -69,17 +69,17 @@ public class AddOrderMessageHandler : IMessageHandler<AddOrderMessage>
 	{
 		if (message.EmailNotification)
 		{
-			_busPublisher.Publish(new SendEmailMessage() { NotificationContent = notificationContent });
+			_busPublisher.Publish(new SendEmailMessage { Content = notificationContent });
 		}
 
 		if (message.SmsNotification)
 		{
-			_busPublisher.Publish(new SendSmsMessage() { NotificationContent = notificationContent });
+			_busPublisher.Publish(new SendSmsMessage { Content = notificationContent });
 		}
 
 		if (message.PushNotification)
 		{
-			_busPublisher.Publish(new SendPushMessage() { NotificationContent = notificationContent });
+			_busPublisher.Publish(new SendPushMessage { Content = notificationContent });
 		}
 	}
 }

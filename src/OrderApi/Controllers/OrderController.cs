@@ -63,7 +63,7 @@ public class OrderController : ControllerBase
 	public async Task<IActionResult> Post(long userId, [FromBody] OrderAddModel orderAddModel, CancellationToken ct)
 	{
 		var userEntity = await _orderDbContext.Set<UserEntity>().Where(e => e.Id == userId && e.Status == RecordStatuses.Active).FirstOrDefaultAsync(ct);
-		if(userEntity == null)
+		if (userEntity == null)
 		{
 			return NotFound("User not found");
 		}
