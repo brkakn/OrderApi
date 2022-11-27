@@ -1,3 +1,4 @@
+﻿using Order.Infrastructures.Cache.Redis;
 using OrderApi.Constants;
 
 namespace OrderApi.Infrastructures.Cache.Redis;
@@ -17,8 +18,7 @@ public static class ServiceCollectionExtension
 		}
 
 		services.Configure<RedisConfigModel>(configuration.GetSection(CommonConstants.CACHE_CONFIG_KEY));
-		services.AddSingleton<RedisServer>();
-		services.AddSingleton<ICacheService, RedisCacheService>();
+		services.AddSingleton<IRedLockService, RedLockService>();
 		return services;
 	}
 }

@@ -2,6 +2,8 @@ version: '3.4'
 
 services:
   redis:
+    hostname: "redis"
+    container_name: "redis"
     image: redis:alpine
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -10,10 +12,12 @@ services:
       retries: 30
     ports:
       - "6379:6379"
-    networks:
-      - order-networks
+    #networks:
+    #  - order-networks
 
   rabbitmq:
+    hostname: "rabbitmq"
+    container_name: "rabbitmq"
     image: "rabbitmq:3-management"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:15672"]
@@ -28,20 +32,20 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
-    networks:
-      - order-networks
+      - "5671:5671"
+    #networks:
+    #  - order-networks
 
-  order.api:
+  order:
     image: ${DOCKER_REGISTRY-}order
     build:
       context: .
       dockerfile: src/OrderApi/Dockerfile
     restart: on-failure
     depends_on:
-      rabbitmq:
-        condition: service_completed_successfully
-    networks:
-      - order-networks
+      - "rabbitmq"
+    #networks:
+    #  - order-networks
 
 networks:
   order-networks:

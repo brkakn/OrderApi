@@ -3,13 +3,14 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/OrderApi/Order.csproj", "OrderApi/"]
+COPY ["src/OrderApi/Order.csproj", "src/OrderApi/"]
 RUN dotnet restore "src/OrderApi/Order.csproj"
 COPY . .
-WORKDIR "/src/OrderApi"
+WORKDIR "/src/src/OrderApi"
 RUN dotnet build "Order.csproj" -c Release -o /app/build
 
 FROM build AS publish

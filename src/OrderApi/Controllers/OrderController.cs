@@ -18,7 +18,6 @@ public class OrderController : ControllerBase
 	private readonly OrderDbContext _orderDbContext;
 	private readonly IMapper _mapper;
 	private readonly IBusPublisher _busPublisher;
-	private readonly ILogger<OrderController> _logger;
 
 	public OrderController(
 		OrderDbContext orderDbContext,
@@ -29,7 +28,6 @@ public class OrderController : ControllerBase
 		_orderDbContext = orderDbContext;
 		_mapper = mapper;
 		_busPublisher = busPublisher;
-		_logger = logger;
 	}
 
 	[HttpGet("{id}")]

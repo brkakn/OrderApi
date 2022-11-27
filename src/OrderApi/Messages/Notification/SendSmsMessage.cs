@@ -7,5 +7,5 @@ namespace OrderApi.Messages.Notification;
 
 public record SendSmsMessage() : PublishedMessage(MessageBrokerKeys.NotificationExchange, MessageBrokerKeys.SendSmsKey), IMessage, IMapFrom<NotificationHistoryEntity>
 {
-
+	public string NotificationContent { get; set; }
 }
