@@ -79,6 +79,10 @@ public class BusSubscriber : IBusSubscriber
 								 autoAck: false,
 								 consumer: consumer);
 		}
+		catch(Exception ex)
+		{
+			throw;
+		}
 		finally
 		{
 			_channelPool.Return(channel);
@@ -94,7 +98,7 @@ public class BusSubscriber : IBusSubscriber
 			await handler.HandleAsync(message);
 			return true;
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
 			return false;
 		}

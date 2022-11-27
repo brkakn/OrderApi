@@ -1,0 +1,48 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    ports:
+      - "6379:6379"
+    networks:
+      - order-networks
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - order-networks
+
+  order.api:
+    image: ${DOCKER_REGISTRY-}order
+    build:
+      context: .
+      dockerfile: src/OrderApi/Dockerfile
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_completed_successfully
+    networks:
+      - order-networks
+
+networks:
+  order-networks:
+    driver: bridge

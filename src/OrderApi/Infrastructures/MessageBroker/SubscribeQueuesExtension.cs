@@ -12,6 +12,7 @@ public static class SubscribeQueuesExtension
 	{
 		var bus = app.UseRabbitMq();
 		await bus.SubscribeAsync<AddOrderMessage>(MessageBrokerKeys.OrderExchange, MessageBrokerKeys.AddOrderQueue, MessageBrokerKeys.AddOrderKey, ExchangeTypes.Topic);
+		await bus.SubscribeAsync<CancelOrderMessage>(MessageBrokerKeys.OrderExchange, MessageBrokerKeys.CancelOrderQueue, MessageBrokerKeys.CancelOrderKey, ExchangeTypes.Topic);
 		await bus.SubscribeAsync<SendEmailMessage>(MessageBrokerKeys.NotificationExchange, MessageBrokerKeys.SendEmailQueue, MessageBrokerKeys.SendEmailKey, ExchangeTypes.Topic);
 		await bus.SubscribeAsync<SendSmsMessage>(MessageBrokerKeys.NotificationExchange, MessageBrokerKeys.SendSmsQueue, MessageBrokerKeys.SendSmsKey, ExchangeTypes.Topic);
 		await bus.SubscribeAsync<SendPushMessage>(MessageBrokerKeys.NotificationExchange, MessageBrokerKeys.SendPushQueue, MessageBrokerKeys.SendPushKey, ExchangeTypes.Topic);

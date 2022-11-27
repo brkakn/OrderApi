@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Order.Infrastructures.Database;
 using Order.Services.AutoMapper;
 using Order.Services.BusServices.Extensions;
+using OrderApi.Infrastructures.Cache.Redis;
 using OrderApi.Infrastructures.MessageBroker;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,9 @@ builder.Services.AddControllers().AddFluentValidation(opt =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddRedisManager(builder.Configuration);
 builder.Services.AddRabbitMQ(builder.Configuration);
+builder.Services.AddHandlers(Assembly.GetExecutingAssembly());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();

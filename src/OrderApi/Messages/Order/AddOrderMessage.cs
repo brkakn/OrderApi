@@ -3,10 +3,11 @@ using Order.Enums;
 using Order.Services.AutoMapper;
 using Order.Services.BusServices.Messages;
 using OrderApi.Constants;
+using OrderApi.Models.Order;
 
 namespace OrderApi.Messages.Order;
 
-public record AddOrderMessage() : PublishedMessage(MessageBrokerKeys.OrderExchange, MessageBrokerKeys.AddOrderKey), IMessage, IMapFrom<OrderEntity>
+public record AddOrderMessage() : PublishedMessage(MessageBrokerKeys.OrderExchange, MessageBrokerKeys.AddOrderKey), IMessage, IMapFrom<OrderEntity>, IMapFrom<OrderAddModel>, IMapFrom<UserEntity>
 {
 	public long UserId { get; set; }
 	public DateTime OrderDate { get; set; }

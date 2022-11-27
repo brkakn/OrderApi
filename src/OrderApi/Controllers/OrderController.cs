@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Order.Entities;
 using Order.Enums;
 using Order.Infrastructures.Database;
+using Order.Services.BusServices;
+using OrderApi.Messages.Order;
 using OrderApi.Models.Order;
 
 namespace Order.Controllers;
@@ -15,15 +17,18 @@ public class OrderController : ControllerBase
 {
 	private readonly OrderDbContext _orderDbContext;
 	private readonly IMapper _mapper;
+	private readonly IBusPublisher _busPublisher;
 	private readonly ILogger<OrderController> _logger;
 
 	public OrderController(
 		OrderDbContext orderDbContext,
 		IMapper mapper,
+		IBusPublisher busPublisher,
 		ILogger<OrderController> logger)
 	{
 		_orderDbContext = orderDbContext;
 		_mapper = mapper;
+		_busPublisher = busPublisher;
 		_logger = logger;
 	}
 
@@ -56,10 +61,20 @@ public class OrderController : ControllerBase
 		return Ok(modelList);
 	}
 
-	[HttpPost]
-	public async Task<IActionResult> Post([FromBody] OrderAddModel orderAddModel, CancellationToken ct)
+	[HttpPost("{userId:required}")]
+	public async Task<IActionResult> Post(long userId, [FromBody] OrderAddModel orderAddModel, CancellationToken ct)
 	{
+		var userEntity = await _orderDbContext.Set<UserEntity>().Where(e => e.Id == userId && e.Status == RecordStatuses.Active).FirstOrDefaultAsync(ct);
+		if(userEntity == null)
+		{
+			return NotFound("User not found");
+		}
 
+		var message = _mapper.Map<AddOrderMessage>(orderAddModel);
+		message = _mapper.Map(userEntity, message);
+		message.UserId = userId;
+
+		_busPublisher.Publish(message, Guid.NewGuid());
 		return Accepted();
 	}
 }

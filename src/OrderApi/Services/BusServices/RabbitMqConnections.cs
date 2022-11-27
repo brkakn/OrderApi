@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
-using Order.Services.BusServices.Helpers;
 using Order.Services.BusServices.Models;
 using RabbitMQ.Client;
 
@@ -25,7 +24,7 @@ public class RabbitMqConnections : IPooledObjectPolicy<IModel>
 			UserName = _configuration.Username,
 			Password = _configuration.Password,
 			Port = _configuration.Port,
-			VirtualHost = VirtualHostSelector.GetVirtualHostByOS(_configuration.VHost),
+			VirtualHost = _configuration.VHost,
 			DispatchConsumersAsync = true
 		};
 
