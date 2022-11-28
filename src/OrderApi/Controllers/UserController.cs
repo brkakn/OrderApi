@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Order.Entities;
@@ -90,6 +91,28 @@ public class UserController : ControllerBase
 		await _orderDbContext.SaveChangesAsync(ct);
 
 		return NoContent();
+	}
+
+	[HttpPatch("{id:required}")]
+	public async Task<IActionResult> Patch(long id, [FromBody] JsonPatchDocument<UserEntity> patchDoc, CancellationToken ct)
+	{
+		if (patchDoc != null)
+		{
+			var existUser = await _orderDbContext.Set<UserEntity>().Where(e => e.Id == id && e.Status == RecordStatuses.Active).FirstOrDefaultAsync(ct);
+			if (existUser == null)
+			{
+				return NotFound();
+			}
+
+			patchDoc.ApplyTo(existUser);
+			existUser.Update();
+			await _orderDbContext.SaveChangesAsync(ct);
+			return new ObjectResult(existUser);
+		}
+		else
+		{
+			return BadRequest(ModelState);
+		}
 	}
 
 	[HttpDelete("{id:required}")]
