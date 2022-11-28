@@ -1,6 +1,9 @@
-﻿namespace Order.Models.User;
+﻿using Order.Entities;
+using Order.Services.AutoMapper;
 
-public record UserUpdateModel
+namespace Order.Models.User;
+
+public record UserModel : IMapFrom<UserEntity>
 {
 	public string Name { get; set; } = null!;
 	public string Surname { get; set; } = null!;

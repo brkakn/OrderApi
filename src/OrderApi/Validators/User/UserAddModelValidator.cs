@@ -4,7 +4,7 @@ using Order.Models.User;
 
 namespace Order.Validators.User;
 
-public class UserAddModelValidator : AbstractValidator<UserAddModel>
+public class UserAddModelValidator : AbstractValidator<UserModel>
 {
 	public UserAddModelValidator()
 	{

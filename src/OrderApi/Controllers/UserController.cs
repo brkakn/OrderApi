@@ -34,7 +34,7 @@ public class UserController : ControllerBase
 		var userModel = await _orderDbContext.Set<UserEntity>()
 			.Where(e => e.Id == id && e.Status == RecordStatuses.Active)
 			.AsNoTracking()
-			.ProjectTo<UserListModel>(_mapper.ConfigurationProvider)
+			.ProjectTo<UserModel>(_mapper.ConfigurationProvider)
 			.FirstOrDefaultAsync(ct);
 
 		if (userModel == null)
@@ -51,14 +51,14 @@ public class UserController : ControllerBase
 		var modelList = await _orderDbContext.Set<UserEntity>()
 			.Where(e => e.Status == RecordStatuses.Active)
 			.AsNoTracking()
-			.ProjectTo<UserListModel>(_mapper.ConfigurationProvider)
+			.ProjectTo<UserModel>(_mapper.ConfigurationProvider)
 			.ToListAsync(ct);
 
 		return Ok(modelList);
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Post([FromBody] UserAddModel userAddModel, CancellationToken ct)
+	public async Task<IActionResult> Post([FromBody] UserModel userAddModel, CancellationToken ct)
 	{
 		bool isExist = await _orderDbContext.Set<UserEntity>().Where(e => e.Email == userAddModel.Email && e.Status == RecordStatuses.Active).AnyAsync(ct);
 		if (isExist)
@@ -77,7 +77,7 @@ public class UserController : ControllerBase
 	}
 
 	[HttpPut("{id:required}")]
-	public async Task<IActionResult> Put(long id, [FromBody] UserAddModel model, CancellationToken ct)
+	public async Task<IActionResult> Put(long id, [FromBody] UserModel model, CancellationToken ct)
 	{
 		var userEntity = await _orderDbContext.Set<UserEntity>().Where(e => e.Id == id && e.Status == RecordStatuses.Active).FirstOrDefaultAsync(ct);
 		if (userEntity == null)
@@ -104,7 +104,7 @@ public class UserController : ControllerBase
 				return NotFound();
 			}
 
-			patchDoc.ApplyTo(existUser);
+			patchDoc.ApplyTo(existUser, ModelState);
 			existUser.Update();
 			await _orderDbContext.SaveChangesAsync(ct);
 			return new ObjectResult(existUser);

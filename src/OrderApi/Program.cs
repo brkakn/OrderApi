@@ -32,6 +32,7 @@ builder.Services.AddRedisManager(builder.Configuration);
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.AddHandlers(Assembly.GetExecutingAssembly());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 

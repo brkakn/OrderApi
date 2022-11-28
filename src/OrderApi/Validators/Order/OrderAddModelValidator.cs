@@ -14,6 +14,7 @@ public class OrderAddModelValidator : AbstractValidator<OrderAddModel>
 			.GreaterThanOrEqualTo(100).WithMessage("Amount must be at least 100 TL");
 		RuleFor(r => r.OrderDate)
 			.NotEmpty().WithMessage("OrderDate must be not null")
-			.Must(e => e.Day < 28).WithMessage("OrderDate must be between 1-28 day of month");
+			.Must(e => e.Day < 28).WithMessage("OrderDate must be between 1-28 day of month")
+			.Must(e => e.Date >= DateTime.Now.Date).WithMessage("OrderDate cannot be in the past");
 	}
 }
