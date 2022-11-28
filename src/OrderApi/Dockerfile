@@ -18,5 +18,6 @@ RUN dotnet publish "Order.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
+ENV ASPNETCORE_ENVIRONMENT Development
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Order.dll"]

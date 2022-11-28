@@ -13,14 +13,12 @@ public class BusSubscriber : IBusSubscriber
 {
 	private readonly DefaultObjectPool<IModel> _channelPool;
 	private readonly IApplicationBuilder _applicationBuilder;
-	private readonly IHttpContextAccessor _httpContextAccessor;
 
 	public BusSubscriber(IApplicationBuilder applicationBuilder)
 	{
 		_applicationBuilder = applicationBuilder;
 		var objectPolicy = applicationBuilder.ApplicationServices.GetRequiredService<IPooledObjectPolicy<IModel>>();
 		_channelPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
-		_httpContextAccessor = applicationBuilder.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
 	}
 
 	public async Task SubscribeAsync<TMessage>(

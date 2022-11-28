@@ -1,4 +1,6 @@
-﻿namespace Order.Enums;
+﻿using System.ComponentModel;
+
+namespace Order.Enums;
 
 public enum NotificationTypes : byte
 {
